@@ -1,2 +1,2 @@
-# gpodder_sdk
+# gpodder_client
  Dart client library for gpodder.net 

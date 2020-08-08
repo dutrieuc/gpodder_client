@@ -1,0 +1,10 @@
+name: gpodder_client
+dependencies:
+  chopper: ^2.4.0
+  json_annotation: ^3.0.0
+
+dev_dependencies:
+  test:
+  build_runner: ^1.0.0
+  chopper_generator: ^2.0.0
+  json_serializable: ^3.3.0

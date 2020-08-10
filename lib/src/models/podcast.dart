@@ -1,24 +1,34 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
 
 part 'podcast.g.dart';
 
 @JsonSerializable()
 class Podcast {
-
-  Podcast(this.url, this.title, this.author, this.description, this.subscribers,
-      this.logo_url, this.website, this.mygpo_link);
+  Podcast({
+    @required this.url,
+    @required this.title,
+    this.author = '',
+    @required this.description,
+    @required this.subscribers,
+    @required this.logo_url,
+    @required this.website,
+    @required this.mygpo_link,
+    this.position_last_week = 0,
+  });
 
   Uri url;
   String title;
-  String author;
+  @JsonKey(defaultValue: '') String author;
   String description;
   int subscribers;
   Uri logo_url;
   Uri website;
   Uri mygpo_link;
-  int position_last_week;
+  @JsonKey(defaultValue: 0) int position_last_week;
 
-  factory Podcast.fromJson(Map<String, dynamic> json) => _$PodcastFromJson(json);
+  factory Podcast.fromJson(Map<String, dynamic> json) =>
+      _$PodcastFromJson(json);
 
   Map<String, dynamic> toJson() => _$PodcastToJson(this);
 
@@ -29,5 +39,4 @@ class Podcast {
   String toString() {
     return this.title;
   }
-
 }

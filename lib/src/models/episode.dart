@@ -12,6 +12,7 @@ class Episode {
   Uri website;
   DateTime released;
   Uri mygpo_link;
+  String status;
 
   factory Episode.fromJson(Map<String, dynamic> json) =>
       _$EpisodeFromJson(json);
@@ -22,7 +23,21 @@ class Episode {
       List<Episode>.from(json.map((i) => Episode.fromJson(i)));
 
   Episode(this.title, this.url, this.podcast_title, this.podcast_url,
-      this.description, this.website, this.released, this.mygpo_link);
+      this.description, this.website, this.released, this.mygpo_link,
+      [this.status = '']){
+    if (!Episode.availableStatus.contains(this.status) && status != null){
+      status = '';
+      throw new FormatException("Episode status is invalid");
+    }
+  }
+
+  static List<String> availableStatus = [
+    'new',
+    'play',
+    'download',
+    'delete',
+    'flattr'
+  ];
 
   @override
   String toString() {

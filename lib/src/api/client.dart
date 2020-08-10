@@ -3,13 +3,14 @@ import "dart:core";
 import 'dart:math';
 
 import 'package:chopper/chopper.dart';
-import 'package:gpodder_client/src/models/episode.dart';
 
 import 'api.dart';
 import 'authentification.dart';
 import '../models/tag.dart';
 import '../models/podcast.dart';
 import '../models/episode.dart';
+import '../models/device.dart';
+import '../models/update.dart';
 
 class GpodderClient {
   String _username;
@@ -18,7 +19,7 @@ class GpodderClient {
 
   GpodderClient(
       {String username, String password, String host = "https://gpodder.net"}) {
-     _username = username;
+    _username = username;
     _chopper = ChopperClient(
       //TODO parametrize gpodder rep
       baseUrl: host,
@@ -73,12 +74,33 @@ class GpodderClient {
   ///
   /// Login API
   ///
-  Future<int> login() async{
+  Future<int> login() async {
     final response = await _service.login(_username);
     return response.statusCode;
   }
-  Future<int> logout() async{
+
+  Future<int> logout() async {
     final response = await _service.login(_username);
     return response.statusCode;
   }
+
+  ///
+  /// Device API
+  ///
+  Future<int> updateDeviceData(Device device) async {
+    final response =
+        await _service.updateDeviceData(_username, device.id, device.toJson());
+    return response.statusCode;
+  }
+
+  Future<List<Device>> listDevices() async {
+    final response = await _service.listDevices(_username);
+    return Device.listFromJson(response.body);
+  }
+
+  Future<Update> deviceUpdates(Device device, int since, {bool include_actions = false}) async {
+    final response = await _service.deviceUpdates(_username, device.id, since, include_actions);
+    return Update.fromJson(response.body);
+  }
+
 }

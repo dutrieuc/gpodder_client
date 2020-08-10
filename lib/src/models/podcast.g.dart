@@ -8,15 +8,20 @@ part of 'podcast.dart';
 
 Podcast _$PodcastFromJson(Map<String, dynamic> json) {
   return Podcast(
-    json['url'] == null ? null : Uri.parse(json['url'] as String),
-    json['title'] as String,
-    json['author'] as String,
-    json['description'] as String,
-    json['subscribers'] as int,
-    json['logo_url'] == null ? null : Uri.parse(json['logo_url'] as String),
-    json['website'] == null ? null : Uri.parse(json['website'] as String),
-    json['mygpo_link'] == null ? null : Uri.parse(json['mygpo_link'] as String),
-  )..position_last_week = json['position_last_week'] as int;
+    url: json['url'] == null ? null : Uri.parse(json['url'] as String),
+    title: json['title'] as String,
+    author: json['author'] as String ?? '',
+    description: json['description'] as String,
+    subscribers: json['subscribers'] as int,
+    logo_url:
+        json['logo_url'] == null ? null : Uri.parse(json['logo_url'] as String),
+    website:
+        json['website'] == null ? null : Uri.parse(json['website'] as String),
+    mygpo_link: json['mygpo_link'] == null
+        ? null
+        : Uri.parse(json['mygpo_link'] as String),
+    position_last_week: json['position_last_week'] as int ?? 0,
+  );
 }
 
 Map<String, dynamic> _$PodcastToJson(Podcast instance) => <String, dynamic>{

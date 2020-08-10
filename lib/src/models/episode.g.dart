@@ -20,6 +20,7 @@ Episode _$EpisodeFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['released'] as String),
     json['mygpo_link'] == null ? null : Uri.parse(json['mygpo_link'] as String),
+    json['status'] as String,
   );
 }
 
@@ -32,4 +33,5 @@ Map<String, dynamic> _$EpisodeToJson(Episode instance) => <String, dynamic>{
       'website': instance.website?.toString(),
       'released': instance.released?.toIso8601String(),
       'mygpo_link': instance.mygpo_link?.toString(),
+      'status': instance.status,
     };

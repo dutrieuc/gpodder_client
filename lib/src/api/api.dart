@@ -10,14 +10,18 @@ abstract class GpodderService extends ChopperService {
   static GpodderService create([ChopperClient client]) =>
       _$GpodderService(client);
 
-  // Authentification
+  ///
+  /// Authentification
+  ///
   @Post(path: '/auth/{username}/login.json')
   Future<Response> login(@Path() String username);
 
   @Post(path: '/auth/{username}/logout.json')
   Future<Response> logout(@Path() String username);
 
-  //Directory API
+  ///
+  ///Directory API
+  ///
   @Get(path: '/tags/{count}.json')
   Future<Response> toptags(@Path() int count);
 
@@ -37,4 +41,21 @@ abstract class GpodderService extends ChopperService {
   @Get(path: '../../search.{format}')
   Future<Response> search(@Path() String format, @Query() String q,
       {@Query() String jsonp, @Query() int scale_logo});
+
+  ///
+  /// Device API
+  ///
+  @Post(path: '/devices/{username}/{deviceid}.json')
+  Future<Response> updateDeviceData(
+      @Path() String username, @Path() String deviceid, @Body() body);
+
+  @Get(path: '/devices/{username}.json')
+  Future<Response> listDevices(@Path() String username);
+
+  @Get(path: '/updates/{username}/{deviceid}.json')
+  Future<Response> deviceUpdates(
+      @Path() String username,
+      @Path() String deviceid,
+      @Query() int since,
+      @Query() bool include_actions);
 }

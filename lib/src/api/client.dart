@@ -6,24 +6,32 @@ import 'package:chopper/chopper.dart';
 import 'package:gpodder_client/src/models/episode.dart';
 
 import 'api.dart';
+import 'authentification.dart';
 import '../models/tag.dart';
 import '../models/podcast.dart';
 import '../models/episode.dart';
 
 class GpodderClient {
-  final ChopperClient _chopper;
+  String _username;
+  ChopperClient _chopper;
   GpodderService _service;
 
-  GpodderClient()
-      : _chopper = ChopperClient(
-          //TODO parametrize gpodder rep
-          baseUrl: "https://gpodder.net",
-          services: [GpodderService.create()],
-          converter: JsonConverter(),
-        ) {
+  GpodderClient(
+      {String username, String password, String host = "https://gpodder.net"}) {
+     _username = username;
+    _chopper = ChopperClient(
+      //TODO parametrize gpodder rep
+      baseUrl: host,
+      services: [GpodderService.create()],
+      converter: JsonConverter(),
+      interceptors: [AuthInterceptor(username, password)],
+    );
     _service = _chopper.getService<GpodderService>();
   }
 
+  ///
+  /// Directory API, public
+  ///
   Future<List<Tag>> topTags(int count) async {
     final response = await _service.toptags(count);
     return response.isSuccessful
@@ -60,5 +68,17 @@ class GpodderClient {
   Future<List<Podcast>> search(String query, {int scale_logo}) async {
     final response = await _service.search('json', query);
     return Podcast.listFromJson(response.body);
+  }
+
+  ///
+  /// Login API
+  ///
+  Future<int> login() async{
+    final response = await _service.login(_username);
+    return response.statusCode;
+  }
+  Future<int> logout() async{
+    final response = await _service.login(_username);
+    return response.statusCode;
   }
 }

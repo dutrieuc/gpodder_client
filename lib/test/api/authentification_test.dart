@@ -11,7 +11,7 @@ Future<void> main(List<String> arg) async {
   print(res);
   var devices = await client.listDevices();
   print(devices);
-  var update = await client.deviceUpdates(dev, 0, include_actions: true);
+  var update = await client.getDeviceUpdate(dev, 0, include_actions: true);
   print(update);
   print(await client.logout());
 }

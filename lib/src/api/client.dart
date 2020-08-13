@@ -3,6 +3,7 @@ import "dart:core";
 import 'dart:math';
 
 import 'package:chopper/chopper.dart';
+import 'package:gpodder_client/src/models/upload_answer.dart';
 
 import 'api.dart';
 import 'authentification.dart';
@@ -98,9 +99,34 @@ class GpodderClient {
     return Device.listFromJson(response.body);
   }
 
-  Future<Update> deviceUpdates(Device device, int since, {bool include_actions = false}) async {
-    final response = await _service.deviceUpdates(_username, device.id, since, include_actions);
+  Future<Update> getDeviceUpdate(
+    Device device,
+    int since, {
+    bool include_actions = false,
+  }) async {
+    final response = await _service.deviceUpdates(
+        _username, device.id, since, include_actions);
     return Update.fromJson(response.body);
   }
 
+  ///
+  /// Subscriptions API
+  ///
+  Future<Update> getSubscriptionUpdate(
+    String deviceid,
+    int since,
+  ) async {
+    final response =
+        await _service.getSubscriptionUpdate(_username, deviceid, since);
+    return Update.fromJson(response.body);
+  }
+
+  Future<UploadAnswer> postSubscriptionUpdate(
+    String deviceid,
+    Update update,
+  ) async {
+    final response = await _service.postSubscriptionUpdate(
+        _username, deviceid, update.toJson());
+    return UploadAnswer.fromJson(response.body);
+  }
 }

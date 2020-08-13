@@ -3,24 +3,20 @@ import 'package:gpodder_client/src/models/podcast.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
-part 'update.g.dart';
+part 'upload_answer.g.dart';
 
 @JsonSerializable()
-class Update {
-  List<Podcast> add;
-  List<Uri> remove;
-  List<Episode> updates;
+class UploadAnswer {
+  List<List<Uri>> update_url;
   int timestamp;
 
-  factory Update.fromJson(Map<String, dynamic> json) => _$UpdateFromJson(json);
+  factory UploadAnswer.fromJson(Map<String, dynamic> json) => _$UploadAnswerFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UpdateToJson(this);
+  Map<String, dynamic> toJson() => _$UploadAnswerToJson(this);
 
-  Update({
-    this.add,
-    this.remove,
-    this.updates,
-    this.timestamp,
+  UploadAnswer({
+    @required this.update_url,
+    @required this.timestamp,
   });
 
   @override

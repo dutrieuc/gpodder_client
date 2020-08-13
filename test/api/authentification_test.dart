@@ -1,6 +1,5 @@
-import 'package:gpodder_client/src/models/device.dart';
-import 'package:test/test.dart';
-import '../../src/api/client.dart';
+import '../../lib/src/api/client.dart';
+import '../../lib/src/models/device.dart';
 
 Future<void> main(List<String> arg) async {
   var client = GpodderClient(username: arg[0], password: arg[1]);

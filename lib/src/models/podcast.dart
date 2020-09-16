@@ -35,6 +35,7 @@ class Podcast {
   static List<Podcast> listFromJson(Iterable<dynamic> json) =>
       List<Podcast>.from(json.map((i) => Podcast.fromJson(i)));
 
+
   @override
   String toString() {
     return this.title;

@@ -12,6 +12,7 @@ import '../models/podcast.dart';
 import '../models/episode.dart';
 import '../models/device.dart';
 import '../models/update.dart';
+import '../models/sub_diff.dart';
 
 class GpodderClient {
   String _username;
@@ -112,21 +113,21 @@ class GpodderClient {
   ///
   /// Subscriptions API
   ///
-  Future<Update> getSubscriptionUpdate(
+  Future<SubscriptionDiff> getSubscriptionUpdate(
     String deviceid,
     int since,
   ) async {
     final response =
         await _service.getSubscriptionUpdate(_username, deviceid, since);
-    return Update.fromJson(response.body);
+    return SubscriptionDiff.fromJson(response.body);
   }
 
   Future<UploadAnswer> postSubscriptionUpdate(
     String deviceid,
-    Update update,
+    SubscriptionDiff diff,
   ) async {
     final response = await _service.postSubscriptionUpdate(
-        _username, deviceid, update.toJson());
+        _username, deviceid, diff.toJson());
     return UploadAnswer.fromJson(response.body);
   }
 }

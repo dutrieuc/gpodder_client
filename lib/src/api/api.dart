@@ -63,7 +63,7 @@ abstract class GpodderService extends ChopperService {
   Future<Response> updateDeviceData(
     @Path() String username,
     @Path() String deviceid,
-    @Body() body,
+    @Body() Map body,
   );
 
   @Get(path: '/devices/{username}.json')
@@ -80,18 +80,18 @@ abstract class GpodderService extends ChopperService {
   ///
   /// Subscription API
   ///
-  @Get(path: '/subscriptions/{username}/{devideid}.json')
+  @Get(path: '/subscriptions/{username}/{deviceid}.json')
   Future<Response> getSubscriptionUpdate(
     @Path() String username,
     @Path() String deviceid,
     @Query() int since,
   );
 
-  @Post(path: '/subscriptions/{username}/{deviceid}/.json')
+  @Post(path: '/subscriptions/{username}/{deviceid}.json')
   Future<Response> postSubscriptionUpdate(
     @Path() String username,
-    @Path() String devideid,
-    @Body() body,
+    @Path() String deviceid,
+    @Body() Map body,
   );
 
 

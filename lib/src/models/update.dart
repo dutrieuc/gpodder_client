@@ -1,7 +1,6 @@
-import 'package:gpodder_client/src/models/episode.dart';
-import 'package:gpodder_client/src/models/podcast.dart';
+import '../models/episode.dart';
+import '../models/podcast.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 
 part 'update.g.dart';
 

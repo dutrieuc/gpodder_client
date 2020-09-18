@@ -3,7 +3,7 @@ import "dart:core";
 import 'dart:math';
 
 import 'package:chopper/chopper.dart';
-import 'package:gpodder_client/src/models/upload_answer.dart';
+import 'package:gpodder_client/src/models/client_parametrization.dart';
 
 import 'api.dart';
 import 'authentification.dart';
@@ -13,6 +13,9 @@ import '../models/episode.dart';
 import '../models/device.dart';
 import '../models/update.dart';
 import '../models/sub_diff.dart';
+import '../models/upload_answer.dart';
+import '../models/episode_action.dart';
+import '../models/ep_diff.dart';
 
 class GpodderClient {
   String _username;
@@ -129,5 +132,33 @@ class GpodderClient {
     final response = await _service.postSubscriptionUpdate(
         _username, deviceid, diff.toJson());
     return UploadAnswer.fromJson(response.body);
+  }
+
+  ///
+  /// Episode API
+  ///
+  Future<EpisodeDiff> getEpisodeActions(
+      {Podcast podcast,
+      Device device,
+      int since = 0,
+      bool aggregated = false}) async {
+    final response = await _service.getEpisodeActions(
+        _username, podcast?.url, device?.id, since, aggregated);
+    return EpisodeDiff.fromJson(response.body);
+  }
+
+  Future<UploadAnswer> postEpisodeActions(
+    List<EpisodeAction> diff,
+  ) async {
+    final response = await _service.postEpisodeActions(_username, diff);
+    return UploadAnswer.fromJson(response.body);
+  }
+
+  ///
+  /// Client Parametrization
+  ///
+  Future<ClientParametrization> getClientParametrization() async {
+    final json = await _service.getClientParametrization();
+    return ClientParametrization.fromJson(json.body);
   }
 }

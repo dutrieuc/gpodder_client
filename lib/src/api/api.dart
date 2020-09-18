@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:chopper/chopper.dart';
-import 'package:gpodder_client/src/models/episode.dart';
 
 part 'api.chopper.dart';
 
@@ -94,5 +93,27 @@ abstract class GpodderService extends ChopperService {
     @Body() Map body,
   );
 
+  ///
+  /// Episode API
+  ///
+  @Get(path: '/episodes/{username}.json')
+  Future<Response> getEpisodeActions(
+    @Path() String username,
+    @Query() Uri podcast,
+    @Query() String device,
+    @Query() int since,
+    @Query() bool aggregated,
+  );
 
+  @Post(path: '/episodes/{username}.json')
+  Future<Response> postEpisodeActions(
+    @Path() String username,
+    @Body() List body,
+  );
+
+  ///
+  /// Client parametrization
+  ///
+  @Get(path: '../..//clientconfig.json')
+  Future<Response> getClientParametrization();
 }

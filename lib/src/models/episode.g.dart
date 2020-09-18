@@ -20,7 +20,9 @@ Episode _$EpisodeFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['released'] as String),
     json['mygpo_link'] == null ? null : Uri.parse(json['mygpo_link'] as String),
-    json['status'] as String,
+    json['status'] == null
+        ? null
+        : EpisodeStatus.fromJson(json['status'] as String),
   );
 }
 

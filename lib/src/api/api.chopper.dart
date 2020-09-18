@@ -127,4 +127,34 @@ class _$GpodderService extends GpodderService {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> getEpisodeActions(
+      String username, Uri podcast, String device, int since, bool aggregated) {
+    final $url = '/api/2/episodes/$username.json';
+    final $params = <String, dynamic>{
+      'podcast': podcast,
+      'device': device,
+      'since': since,
+      'aggregated': aggregated
+    };
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> postEpisodeActions(
+      String username, List<dynamic> body) {
+    final $url = '/api/2/episodes/$username.json';
+    final $body = body;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getClientParametrization() {
+    final $url = '/api/2/../..//clientconfig.json';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
 }

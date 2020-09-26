@@ -6,7 +6,7 @@ import 'package:chopper/chopper.dart';
 import 'package:gpodder_client/src/models/client_parametrization.dart';
 
 import 'api.dart';
-import 'authentification.dart';
+import 'interceptors.dart';
 import '../models/tag.dart';
 import '../models/podcast.dart';
 import '../models/episode.dart';
@@ -30,7 +30,7 @@ class GpodderClient {
       baseUrl: host,
       services: [GpodderService.create()],
       converter: JsonConverter(),
-      interceptors: [AuthInterceptor(username, password)],
+      interceptors: [ErrorInterceptor(), AuthInterceptor(username, password)],
     );
     _service = _chopper.getService<GpodderService>();
   }

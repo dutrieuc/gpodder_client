@@ -28,3 +28,14 @@ class AuthInterceptor implements RequestInterceptor {
     }
   }
 }
+
+class ErrorInterceptor implements ResponseInterceptor {
+  @override
+  FutureOr<Response> onResponse(Response response) {
+    if(response.statusCode >= 400) {
+      throw HttpException('${response.statusCode}');
+    }
+    return response;
+  }
+
+}

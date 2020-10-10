@@ -8,8 +8,8 @@ import 'package:gpodder_client/src/models/client_parametrization.dart';
 import 'api.dart';
 import 'interceptors.dart';
 import '../models/tag.dart';
-import '../models/podcast.dart';
-import '../models/episode.dart';
+import '../podcast/gpopodcast.dart';
+import '../episode/gpoepisode.dart';
 import '../models/device.dart';
 import '../models/update.dart';
 import '../models/sub_diff.dart';
@@ -17,12 +17,12 @@ import '../models/upload_answer.dart';
 import '../models/episode_action.dart';
 import '../models/ep_diff.dart';
 
-class GpodderClient {
+class GpodderWrapper {
   String _username;
   ChopperClient _chopper;
   GpodderService _service;
 
-  GpodderClient(
+  GpodderWrapper(
       {String username, String password, String host = "https://gpodder.net"}) {
     _username = username;
     _chopper = ChopperClient(
@@ -45,35 +45,35 @@ class GpodderClient {
         : Future.error(response.statusCode);
   }
 
-  Future<List<Podcast>> podcastsForTag(Tag tag, int count) async {
+  Future<List<GpoPodcast>> podcastsForTag(Tag tag, int count) async {
     final response = await _service.podcastsForTag(tag.tag, count);
     return response.isSuccessful
-        ? Podcast.listFromJson(response.body)
+        ? GpoPodcast.listFromJson(response.body)
         : Future.error(response.statusCode);
   }
 
-  Future<Podcast> podcast(Uri url) async {
+  Future<GpoPodcast> podcast(Uri url) async {
     final response = await _service.podcastData(url);
-    return Podcast.fromJson(response.body);
+    return GpoPodcast.fromJson(response.body);
   }
 
-  Future<Episode> episode(Uri podcast, String media_url) async {
+  Future<GpoEpisode> episode(Uri podcast, String media_url) async {
     final response = await _service.episodeData(podcast, media_url);
-    return Episode.fromJson(response.body);
+    return GpoEpisode.fromJson(response.body);
   }
 
-  Future<List<Podcast>> topPodcasts(int number, {int scale_logo = 64}) async {
+  Future<List<GpoPodcast>> topPodcasts(int number, {int scale_logo = 64}) async {
     number = max(1, number);
     number = min(100, number);
     scale_logo = min(256, scale_logo);
     final response =
         await _service.topPodcasts(number, 'json', scale_logo: scale_logo);
-    return Podcast.listFromJson(response.body);
+    return GpoPodcast.listFromJson(response.body);
   }
 
-  Future<List<Podcast>> search(String query, {int scale_logo}) async {
+  Future<List<GpoPodcast>> search(String query, {int scale_logo}) async {
     final response = await _service.search('json', query);
-    return Podcast.listFromJson(response.body);
+    return GpoPodcast.listFromJson(response.body);
   }
 
   ///
@@ -138,7 +138,7 @@ class GpodderClient {
   /// Episode API
   ///
   Future<EpisodeDiff> getEpisodeActions(
-      {Podcast podcast,
+      {GpoPodcast podcast,
       Device device,
       int since = 0,
       bool aggregated = false}) async {

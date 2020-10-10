@@ -1,11 +1,12 @@
+import 'package:gpodder_client/src/podcast/podcast.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
-part 'podcast.g.dart';
+part 'gpopodcast.g.dart';
 
 @JsonSerializable()
-class Podcast {
-  Podcast({
+class GpoPodcast extends Podcast{
+  GpoPodcast({
     @required this.url,
     @required this.title,
     this.author = '',
@@ -27,13 +28,13 @@ class Podcast {
   Uri mygpo_link;
   @JsonKey(defaultValue: 0) int position_last_week;
 
-  factory Podcast.fromJson(Map<String, dynamic> json) =>
-      _$PodcastFromJson(json);
+  factory GpoPodcast.fromJson(Map<String, dynamic> json) =>
+      _$GpoPodcastFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PodcastToJson(this);
+  Map<String, dynamic> toJson() => _$GpoPodcastToJson(this);
 
-  static List<Podcast> listFromJson(Iterable<dynamic> json) =>
-      List<Podcast>.from(json.map((i) => Podcast.fromJson(i)));
+  static List<GpoPodcast> listFromJson(Iterable<dynamic> json) =>
+      List<GpoPodcast>.from(json.map((i) => GpoPodcast.fromJson(i)));
 
 
   @override

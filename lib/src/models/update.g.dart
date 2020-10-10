@@ -10,14 +10,14 @@ Update _$UpdateFromJson(Map<String, dynamic> json) {
   return Update(
     add: (json['add'] as List)
         ?.map((e) =>
-            e == null ? null : Podcast.fromJson(e as Map<String, dynamic>))
+            e == null ? null : GpoPodcast.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     remove: (json['remove'] as List)
         ?.map((e) => e == null ? null : Uri.parse(e as String))
         ?.toList(),
     updates: (json['updates'] as List)
         ?.map((e) =>
-            e == null ? null : Episode.fromJson(e as Map<String, dynamic>))
+            e == null ? null : GpoEpisode.fromJson(e as Map<String, dynamic>))
         ?.toList(),
     timestamp: json['timestamp'] as int,
   );

@@ -1,14 +1,12 @@
-import '../../lib/src/api/client.dart';
+import '../../lib/src/api/wrapper.dart';
 import '../../lib/src/models/device.dart';
-import '../../lib/src/models/podcast.dart';
-import '../../lib/src/models/update.dart';
 import '../../lib/src/models/sub_diff.dart';
 import '../../lib/src/models/episode_action.dart';
 import '../../lib/src/models/episode_status.dart';
 
 Future<void> main(List<String> arg) async {
   int time = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-  var client = GpodderClient(username: arg[0], password: arg[1]);
+  var client = GpodderWrapper(username: arg[0], password: arg[1]);
   print(await client.getClientParametrization());
   print(await client.login());
   var dev = Device(

@@ -1,14 +1,14 @@
-import '../models/episode.dart';
-import '../models/podcast.dart';
+import '../episode/gpoepisode.dart';
+import '../podcast/gpopodcast.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'update.g.dart';
 
 @JsonSerializable()
 class Update {
-  List<Podcast> add;
+  List<GpoPodcast> add;
   List<Uri> remove;
-  List<Episode> updates;
+  List<GpoEpisode> updates;
   int timestamp;
 
   factory Update.fromJson(Map<String, dynamic> json) => _$UpdateFromJson(json);

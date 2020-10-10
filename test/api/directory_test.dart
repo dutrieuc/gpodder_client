@@ -1,9 +1,9 @@
 import 'package:test/test.dart';
-import '../../lib/src/api/client.dart';
+import '../../lib/src/api/wrapper.dart';
 import '../../lib/src/models/tag.dart';
 
 Future<void> main() async {
-  var client = GpodderClient();
+  var client = GpodderWrapper();
   var episode = client.episode(Uri.http('feeds.99percentinvisible.org', '/99percentinvisible'),
       'https://dts.podtrac.com/redirect.mp3/media.blubrry.com/99percentinvisible/dovetail.prxu.org/96/9a5d71bb-62ca-4391-9ac6-df00f5b4578b/408_Valley_of_the_Fallen_pt01.mp3'
   );

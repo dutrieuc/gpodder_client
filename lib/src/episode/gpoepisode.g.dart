@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'episode.dart';
+part of 'gpoepisode.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Episode _$EpisodeFromJson(Map<String, dynamic> json) {
-  return Episode(
+GpoEpisode _$GpoEpisodeFromJson(Map<String, dynamic> json) {
+  return GpoEpisode(
     json['title'] as String,
     json['url'] == null ? null : Uri.parse(json['url'] as String),
     json['podcast_title'] as String,
@@ -26,7 +26,8 @@ Episode _$EpisodeFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$EpisodeToJson(Episode instance) => <String, dynamic>{
+Map<String, dynamic> _$GpoEpisodeToJson(GpoEpisode instance) =>
+    <String, dynamic>{
       'title': instance.title,
       'url': instance.url?.toString(),
       'podcast_title': instance.podcast_title,

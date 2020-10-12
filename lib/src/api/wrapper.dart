@@ -24,6 +24,9 @@ class GpodderWrapper {
 
   GpodderWrapper(
       {String username, String password, String host = "https://gpodder.net"}) {
+    if (host.endsWith('/')) {
+      host = host.substring(0, host.length - 1);
+    }
     _username = username;
     _chopper = ChopperClient(
       //TODO parametrize gpodder rep

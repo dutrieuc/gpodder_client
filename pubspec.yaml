@@ -2,6 +2,7 @@ name: gpodder_client
 dependencies:
   chopper: ^3.0.0
   json_annotation: ^3.0.0
+  podcast_search: ^0.2.2
 
 dev_dependencies:
   test:

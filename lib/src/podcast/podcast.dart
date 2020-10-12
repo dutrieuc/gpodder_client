@@ -1,24 +1,15 @@
 
+import 'package:gpodder_client/src/podcast/gpopodcast.dart';
+import 'package:meta/meta.dart';
+
 abstract class Podcast {
 
-  Uri get url;
-  set url(Uri value);
+  Uri guidUrl;
 
-  String get title;
-  set title(String value);
+  Podcast(this.guidUrl);
 
-  String get author;
-  set author(String value);
-
-  String get description;
-  set description(String value);
-
-  int get subscribers;
-  set subscribers(int value);
-
-  Uri get mygpo_link;
-  set mygpo_link(Uri value);
-
-  Uri get website;
-  set website(Uri value);
+  @override
+  String toString() {
+    return guidUrl.toString();
+  }
 }

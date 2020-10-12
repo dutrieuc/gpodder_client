@@ -33,7 +33,7 @@ class ErrorInterceptor implements ResponseInterceptor {
   @override
   FutureOr<Response> onResponse(Response response) {
     if(response.statusCode >= 400) {
-      throw HttpException('${response.statusCode}');
+      return Future.error(HttpException('${response.statusCode}'));
     }
     return response;
   }

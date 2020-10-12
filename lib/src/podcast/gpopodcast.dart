@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 part 'gpopodcast.g.dart';
 
 @JsonSerializable()
-class GpoPodcast extends Podcast{
+class GpoPodcast extends Podcast {
   GpoPodcast({
     @required this.url,
     @required this.title,
@@ -16,17 +16,19 @@ class GpoPodcast extends Podcast{
     @required this.website,
     @required this.mygpo_link,
     this.position_last_week = 0,
-  });
+  }) : super(url);
 
   Uri url;
   String title;
-  @JsonKey(defaultValue: '') String author;
+  @JsonKey(defaultValue: '')
+  String author;
   String description;
   int subscribers;
   Uri logo_url;
   Uri website;
   Uri mygpo_link;
-  @JsonKey(defaultValue: 0) int position_last_week;
+  @JsonKey(defaultValue: 0)
+  int position_last_week;
 
   factory GpoPodcast.fromJson(Map<String, dynamic> json) =>
       _$GpoPodcastFromJson(json);
@@ -36,6 +38,9 @@ class GpoPodcast extends Podcast{
   static List<GpoPodcast> listFromJson(Iterable<dynamic> json) =>
       List<GpoPodcast>.from(json.map((i) => GpoPodcast.fromJson(i)));
 
+  static GpoPodcast from(GpoPodcast gpodcast){
+    return gpodcast;
+  }
 
   @override
   String toString() {

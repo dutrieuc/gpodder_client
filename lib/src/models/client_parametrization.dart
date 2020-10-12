@@ -4,12 +4,16 @@ part 'client_parametrization.g.dart';
 
 @JsonSerializable()
 class ClientParametrization {
-  ClientParametrization(this.mygpo, this.feedservice, this.update_timeout);
+  ClientParametrization(this.mygpo, this.feedservice, this.update_timeout){
+    _timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+  }
 
   BaseUrl mygpo;
   @JsonKey(name: 'mygpo-feedservice')
   BaseUrl feedservice;
   int update_timeout;
+  int _timestamp;
+  int get timestamp => _timestamp;
 
   factory ClientParametrization.fromJson(Map<String, dynamic> json) =>
       _$ClientParametrizationFromJson(json);

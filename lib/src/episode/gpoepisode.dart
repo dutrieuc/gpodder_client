@@ -6,7 +6,7 @@ import 'episode.dart';
 part 'gpoepisode.g.dart';
 
 @JsonSerializable()
-class GpoEpisode extends Episode{
+class GpoEpisode extends Episode {
   String title;
   Uri url;
   String podcast_title;
@@ -25,9 +25,19 @@ class GpoEpisode extends Episode{
   static List<GpoEpisode> listFromJson(Iterable<dynamic> json) =>
       List<GpoEpisode>.from(json.map((i) => GpoEpisode.fromJson(i)));
 
-  GpoEpisode(this.title, this.url, this.podcast_title, this.podcast_url,
-      this.description, this.website, this.released, this.mygpo_link,
-      [this.status]);
+  GpoEpisode(
+    this.title,
+    this.url,
+    this.podcast_title,
+    this.podcast_url,
+    this.description,
+    this.website,
+    this.released,
+    this.mygpo_link, [
+    this.status,
+  ]) : super(url);
+
+  static GpoEpisode from(GpoEpisode gpoepisode) => gpoepisode;
 
   @override
   String toString() {

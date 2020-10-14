@@ -10,6 +10,6 @@ abstract class Podcast {
 
   @override
   String toString() {
-    return guidUrl.toString();
+    return 'Podcast: ' + guidUrl.toString();
   }
 }

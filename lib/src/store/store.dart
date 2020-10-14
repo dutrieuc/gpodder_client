@@ -1,16 +1,16 @@
+import 'package:gpodder_client/src/user.dart';
 import 'package:gpodder_client/src/episode/episode.dart';
 import 'package:gpodder_client/src/models/client_parametrization.dart';
+import 'package:gpodder_client/src/models/device.dart';
 import 'package:gpodder_client/src/models/episode_status.dart';
 import 'package:gpodder_client/src/podcast/podcast.dart';
-import 'package:gpodder_client/src/store/user.dart';
+import 'package:gpodder_client/src/store/user_info.dart';
 
 abstract class Store<P extends Podcast, E extends Episode> {
   /// General
-  Future<User> getUser();
-  Future<void> putUser(User user);
-  Future<void> deleteUser(){
-    return putUser(User.noUserAvailable);
-  }
+  Future<UserInfo> getUserInfo();
+  Future<void> putUserInfo(User user, Device device);
+  Future<void> deleteUser();
   Future<ClientParametrization> getClientParameters();
   Future<void> close();
 

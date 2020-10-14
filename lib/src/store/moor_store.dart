@@ -1,8 +1,11 @@
 import 'package:gpodder_client/src/episode/gpoepisode.dart';
 import 'package:gpodder_client/src/models/client_parametrization.dart';
+import 'package:gpodder_client/src/models/device.dart';
 import 'package:gpodder_client/src/podcast/gpopodcast.dart';
 import 'package:gpodder_client/src/store/store.dart';
-import 'package:gpodder_client/src/store/user.dart';
+import 'package:gpodder_client/src/store/user_info.dart';
+
+import '../user.dart';
 
 class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   @override
@@ -72,15 +75,20 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<User> getUser() {
+  Future<UserInfo> getUserInfo() {
     // TODO: implement getUser
-    return Future.value(User.noUserAvailable);
+    return Future.error('No user available');
   }
 
   @override
-  Future<void> putUser(User user) {
+  Future<void> putUserInfo(User user, Device device) {
     // TODO: implement putUser
-    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteUser() {
+    // TODO: implement deleteUser
+    // throw UnimplementedError();
   }
 
   @override

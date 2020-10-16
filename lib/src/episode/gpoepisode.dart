@@ -16,6 +16,8 @@ class GpoEpisode extends Episode {
   DateTime released;
   Uri mygpo_link;
   EpisodeStatus status;
+  int position;
+  int total;
 
   factory GpoEpisode.fromJson(Map<String, dynamic> json) =>
       _$GpoEpisodeFromJson(json);
@@ -33,9 +35,11 @@ class GpoEpisode extends Episode {
     this.description,
     this.website,
     this.released,
-    this.mygpo_link, [
+    this.mygpo_link, {
     this.status,
-  ]) : super(url);
+    this.position,
+    this.total,
+  }) : super(url);
 
   static GpoEpisode from(GpoEpisode gpoepisode) => gpoepisode;
 

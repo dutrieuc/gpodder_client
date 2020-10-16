@@ -35,14 +35,6 @@ class EpisodeAction {
     this.total,
   });
 
-  static List<String> availableStatus = [
-    'new',
-    'play',
-    'download',
-    'delete',
-    'flattr'
-  ];
-
   @override
   String toString() {
     return this.episode.toString() + ' status:' + action.toString();

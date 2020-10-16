@@ -27,7 +27,7 @@ class User<P extends Podcast, E extends Episode> {
 
   Future<void> logout() {
     return Future.wait([
-      store.deleteUser(),
+      store.close(),
       server.api.logout(),
     ]);
   }
@@ -65,13 +65,13 @@ class User<P extends Podcast, E extends Episode> {
     var answer = await server.api.postSubscriptionUpdate(
         device.id,
         SubscriptionDiff(
-          add: podcasts.map((e) => e.guidUrl),
+          add: podcasts.map((e) => e.url).toList(),
           remove: [],
         ));
     for (List<Uri> urls in answer.update_urls) {
       for (P p in podcasts) {
-        if (p.guidUrl == urls[0]) {
-          p.guidUrl = urls[1];
+        if (p.url == urls[0]) {
+          p.url = urls[1];
         }
       }
     }
@@ -85,10 +85,24 @@ class User<P extends Podcast, E extends Episode> {
           device.id,
           SubscriptionDiff(
             add: [],
-            remove: podcasts.map((e) => e.guidUrl),
+            remove: podcasts.map((e) => e.url).toList(),
           )),
-      store.deletePodcasts(podcasts),
+      store.deletePodcasts(podcasts.map((e) => e.url)),
     ]);
+  }
+
+  Future<void> refreshSubscription() async {
+    var update = await server.api.getSubscriptionUpdate(device.id, 0);
+    return Future.wait([
+      store.deletePodcasts(update.remove),
+      store.savePodcasts(await Future.wait(
+          update.add.map((e) async => await loadPodcast(e)))),
+      //TODO save timestamp
+    ]);
+  }
+
+  Future<List<P>> subscriptions() async {
+    return (await store.subscriptions()).toList();
   }
 
   Future<void> setDownloaded(Episode episode) {

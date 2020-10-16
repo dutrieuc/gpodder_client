@@ -1,17 +1,20 @@
+import 'package:gpodder_client/src/store/moor_store/converter.dart';
+import 'package:gpodder_client/src/store/moor_store/database.dart';
+
 import 'package:gpodder_client/src/episode/gpoepisode.dart';
 import 'package:gpodder_client/src/models/client_parametrization.dart';
-import 'package:gpodder_client/src/models/device.dart';
 import 'package:gpodder_client/src/podcast/gpopodcast.dart';
 import 'package:gpodder_client/src/store/store.dart';
 import 'package:gpodder_client/src/store/user_info.dart';
 
-import '../user.dart';
-
 class MoorStore extends Store<GpoPodcast, GpoEpisode> {
+  final GpodderDB _db;
+
+  MoorStore(e): _db = GpodderDB(e);
+
   @override
   Future<void> close() {
-    // TODO: implement close
-    throw UnimplementedError();
+    return _db.close();
   }
 
   @override
@@ -21,9 +24,9 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<void> deletePodcasts(List<GpoPodcast> podcast) {
-    // TODO: implement deletePodcast
-    throw UnimplementedError();
+  Future<void> deletePodcasts(Iterable<Uri> podcasts) {
+    return _db.deletePodcasts(
+        podcasts.map((e) => PodcastRecord(guidUrl: e.toString())));
   }
 
   @override
@@ -57,15 +60,8 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<GpoPodcast> findPodcastByGuid(String guid) {
-    // TODO: implement findPodcastByGuid
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<GpoPodcast> findPodcastById(num id) {
-    // TODO: implement findPodcastById
-    throw UnimplementedError();
+  Future<GpoPodcast> findPodcastByGuid(String urlGuid) async {
+    return PodcastConverter.mapToDart(await _db.findPodcastByGuid(urlGuid));
   }
 
   @override
@@ -81,7 +77,7 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<void> putUserInfo(User user, Device device) {
+  Future<void> putUserInfo(UserInfo userInfo) async {
     // TODO: implement putUser
   }
 
@@ -98,14 +94,13 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<GpoPodcast> savePodcasts(List<GpoPodcast> podcast) {
-    // TODO: implement savePodcast
-    throw UnimplementedError();
+  Future<void> savePodcasts(Iterable<GpoPodcast> podcasts) {
+    return _db.savePodcasts(podcasts.map((p) => PodcastConverter.mapToSql(p)));
   }
 
   @override
-  Future<List<GpoPodcast>> subscriptions() {
-    // TODO: implement subscriptions
-    throw UnimplementedError();
+  Future<Iterable<GpoPodcast>> subscriptions() async {
+    var ps = await _db.allPodcasts();
+    return ps.map((e) => PodcastConverter.mapToDart(e));
   }
 }

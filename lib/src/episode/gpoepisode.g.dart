@@ -20,14 +20,18 @@ GpoEpisode _$GpoEpisodeFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['released'] as String),
     json['mygpo_link'] == null ? null : Uri.parse(json['mygpo_link'] as String),
-    json['status'] == null
+    status: json['status'] == null
         ? null
         : EpisodeStatus.fromJson(json['status'] as String),
-  );
+    position: json['position'] as int,
+    total: json['total'] as int,
+  )..guidUrl =
+      json['guidUrl'] == null ? null : Uri.parse(json['guidUrl'] as String);
 }
 
 Map<String, dynamic> _$GpoEpisodeToJson(GpoEpisode instance) =>
     <String, dynamic>{
+      'guidUrl': instance.guidUrl?.toString(),
       'title': instance.title,
       'url': instance.url?.toString(),
       'podcast_title': instance.podcast_title,
@@ -37,4 +41,6 @@ Map<String, dynamic> _$GpoEpisodeToJson(GpoEpisode instance) =>
       'released': instance.released?.toIso8601String(),
       'mygpo_link': instance.mygpo_link?.toString(),
       'status': instance.status,
+      'position': instance.position,
+      'total': instance.total,
     };

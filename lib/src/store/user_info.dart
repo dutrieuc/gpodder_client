@@ -1,7 +1,7 @@
 import 'package:gpodder_client/src/models/device.dart';
 
 class UserInfo {
-  final Uri host;
+  final String host;
   final String username;
   final String password;
   final Device device;

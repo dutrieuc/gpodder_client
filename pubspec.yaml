@@ -3,12 +3,20 @@ dependencies:
   chopper: ^3.0.0
   json_annotation: ^3.0.0
   podcast_search: ^0.2.2
+  moor: ^3.3.1
+  sqlite3_flutter_libs:
+  sqflite: ^1.1.7
+  path_provider:
+  path:
 
 dev_dependencies:
-  test:
   build_runner: ^1.0.0
   chopper_generator: ^3.0.0
   json_serializable: ^3.3.0
+  moor_generator: ^3.3.1
+  dotenv:
+  flutter_test:
+    sdk: flutter
 
 
 

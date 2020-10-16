@@ -1,4 +1,3 @@
-import 'package:test/test.dart';
 import '../../lib/src/api/wrapper.dart';
 import '../../lib/src/models/tag.dart';
 

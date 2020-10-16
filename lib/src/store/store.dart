@@ -9,25 +9,24 @@ import 'package:gpodder_client/src/store/user_info.dart';
 abstract class Store<P extends Podcast, E extends Episode> {
   /// General
   Future<UserInfo> getUserInfo();
-  Future<void> putUserInfo(User user, Device device);
+  Future<void> putUserInfo(UserInfo userInfo);
   Future<void> deleteUser();
   Future<ClientParametrization> getClientParameters();
   Future<void> close();
 
   /// Podcasts
-  Future<P> findPodcastById(num id);
-  Future<P> findPodcastByGuid(String guid);
-  Future<P> savePodcasts(List<P> podcasts);
-  Future<void> deletePodcasts(List<P> podcast);
-  Future<List<P>> subscriptions();
+  Future<P> findPodcastByGuid(String urlGuid);
+  Future<void> savePodcasts(Iterable<P> podcasts);
+  Future<void> deletePodcasts(Iterable<Uri> podcasts);
+  Future<Iterable<P>> subscriptions();
 
   /// Episodes
-  Future<E> findEpisodeByGuid(String guid);
-  Future<List<E>> findEpisodesByPodcastGuid(String pguid);
+  Future<E> findEpisodeByGuid(String urlGuid);
+  Future<List<E>> findEpisodesByPodcastGuid(String pUrlGuid);
   Future<E> findEpisodeByTaskId(String taskId);
   Future<E> saveEpisode(E episode);
   Future<void> deleteEpisode(E episode);
-  Future<List<E>> findDownloadsByPodcastGuid(String pguid);
+  Future<List<E>> findDownloadsByPodcastGuid(String pUrlGuid);
   Future<List<E>> findDownloads();
 
   /// Event listeners

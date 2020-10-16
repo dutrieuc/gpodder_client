@@ -4,6 +4,7 @@ import 'package:gpodder_client/src/episode/episode.dart';
 import 'package:gpodder_client/src/models/client_parametrization.dart';
 import 'package:gpodder_client/src/podcast/podcast.dart';
 import 'package:gpodder_client/src/store/store.dart';
+import 'package:gpodder_client/src/store/user_info.dart';
 import 'package:meta/meta.dart';
 
 import 'user.dart';
@@ -22,6 +23,7 @@ class Server<P extends Podcast, E extends Episode> {
     if (parameters == null ||
         parameters.timestamp + parameters.update_timeout > now ) {
       parameters = await api.getClientParametrization();
+      //TODO store parameters
     }
   }
 
@@ -40,11 +42,11 @@ class Server<P extends Podcast, E extends Episode> {
         username: username,
         password: password,
       );
+      store.putUserInfo(UserInfo(url, username, password, device));
     }
     try {
       await api.login();
       var user = User(store, this, podcastFrom, episodeFrom, device);
-      store.putUserInfo(user, device);
       return user;
     } catch (e) {
       store.deleteUser();

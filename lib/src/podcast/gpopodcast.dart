@@ -7,18 +7,17 @@ part 'gpopodcast.g.dart';
 @JsonSerializable()
 class GpoPodcast extends Podcast {
   GpoPodcast({
-    @required this.url,
-    @required this.title,
+    @required Uri url,
+    this.title,
     this.author = '',
-    @required this.description,
-    @required this.subscribers,
-    @required this.logo_url,
-    @required this.website,
-    @required this.mygpo_link,
+    this.description,
+    this.subscribers,
+    this.logo_url,
+    this.website,
+    this.mygpo_link,
     this.position_last_week = 0,
   }) : super(url);
 
-  Uri url;
   String title;
   @JsonKey(defaultValue: '')
   String author;

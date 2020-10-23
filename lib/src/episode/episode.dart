@@ -1,15 +1,17 @@
-
-import '../models/episode_status.dart';
+import 'package:gpodder_client/src/models/episode_action.dart';
 
 abstract class Episode{
 
-  Uri guidUrl;
+  Uri url;
+  Uri podcast_url;
 
-  Episode(this.guidUrl);
+  Episode(this.url, this.podcast_url);
+
+  Episode applyAction(EpisodeAction action);
 
   @override
   String toString() {
-    return 'Episode: ' + guidUrl.toString();
+    return 'Episode: ' + url.toString();
   }
 }
 

@@ -10,7 +10,7 @@ import 'package:gpodder_client/src/store/user_info.dart';
 class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   final GpodderDB _db;
 
-  MoorStore(e): _db = GpodderDB(e);
+  MoorStore(e) : _db = GpodderDB(e);
 
   @override
   Future<void> close() {
@@ -42,9 +42,8 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<GpoEpisode> findEpisodeByGuid(String guid) {
-    // TODO: implement findEpisodeByGuid
-    throw UnimplementedError();
+  Future<GpoEpisode> findEpisodeByGuid(String guid) async {
+    return EpisodeConverter.mapToDart(await _db.findEpisodeByGuid(guid));
   }
 
   @override
@@ -88,9 +87,8 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<GpoEpisode> saveEpisode(GpoEpisode episode) {
-    // TODO: implement saveEpisode
-    throw UnimplementedError();
+  Future<void> saveEpisodes(Iterable<GpoEpisode> episodes) {
+    return _db.saveEpisodes(episodes.map((e) => EpisodeConverter.mapToSql(e)));
   }
 
   @override
@@ -99,8 +97,29 @@ class MoorStore extends Store<GpoPodcast, GpoEpisode> {
   }
 
   @override
-  Future<Iterable<GpoPodcast>> subscriptions() async {
+  Future<Map<Uri, GpoPodcast>> subscriptions() async {
     var ps = await _db.allPodcasts();
-    return ps.map((e) => PodcastConverter.mapToDart(e));
+    return Map.fromIterable(
+      ps,
+      key: (v) => Uri.parse(v.guidUrl),
+      value: (v) => PodcastConverter.mapToDart(v),
+    );
+  }
+
+  @override
+  Future<void> replaceEpisode(GpoEpisode episode) {
+    return _db
+        .update(_db.episodeRecords)
+        .replace(EpisodeConverter.mapToSql(episode));
+  }
+
+  @override
+  Future<Map<Uri, GpoEpisode>> episodes() async {
+    var eps = await _db.allEpisodes();
+    return Map.fromIterable(
+      eps,
+      key: (v) => Uri.parse(v.guidUrl),
+      value: (v) => EpisodeConverter.mapToDart(v),
+    );
   }
 }

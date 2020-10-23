@@ -10,6 +10,7 @@ import 'package:dotenv/dotenv.dart' show load, env;
 
 void main() {
   User<GpoPodcast, GpoEpisode> user;
+  GpoPodcast podcast;
   test('login', () async {
     load();
     var dev = Device(
@@ -27,19 +28,23 @@ void main() {
 
   test('Podcast subscription and sync', () async {
     print(' --- search');
-    var search = await user.search(query: "méthode");
+    var search = await user.search(query: "les idées claires");
     print(search);
-    var podcast = await user.loadPodcast(search[0].url);
+    podcast = await user.loadPodcast(search[0].url);
     print(podcast);
     print(' --- Loading subscriptions');
-    await user.refreshSubscription();
+    await user.pullSubscription();
     print(await user.subscriptions());
     print(' --- subscribing to : ' + podcast.toString());
     podcast = (await user.subscribe([podcast])).first;
-    await user.refreshSubscription();
+    await user.pullSubscription();
     print(await user.subscriptions());
+  }, timeout: Timeout(Duration(minutes: 5)));
+
+  test('closing', () async {
     print(' --- unsubscribing');
     await user.unsubscribe([podcast]);
+    print(' --- logging out');
     await user.logout();
-  }, timeout: Timeout(Duration(minutes: 5)));
+  });
 }

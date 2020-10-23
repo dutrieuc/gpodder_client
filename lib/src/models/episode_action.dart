@@ -37,6 +37,14 @@ class EpisodeAction {
 
   @override
   String toString() {
-    return this.episode.toString() + ' status:' + action.toString();
+    return this.episode.toString() +
+        ' status:' +
+        action.toString() +
+        ' started, position, total: ' +
+        started.toString() +
+        ', ' +
+        position.toString() +
+        ', ' +
+        total.toString();
   }
 }

@@ -25,17 +25,15 @@ GpoEpisode _$GpoEpisodeFromJson(Map<String, dynamic> json) {
         : EpisodeStatus.fromJson(json['status'] as String),
     position: json['position'] as int,
     total: json['total'] as int,
-  )..guidUrl =
-      json['guidUrl'] == null ? null : Uri.parse(json['guidUrl'] as String);
+  );
 }
 
 Map<String, dynamic> _$GpoEpisodeToJson(GpoEpisode instance) =>
     <String, dynamic>{
-      'guidUrl': instance.guidUrl?.toString(),
-      'title': instance.title,
       'url': instance.url?.toString(),
-      'podcast_title': instance.podcast_title,
       'podcast_url': instance.podcast_url?.toString(),
+      'title': instance.title,
+      'podcast_title': instance.podcast_title,
       'description': instance.description,
       'website': instance.website?.toString(),
       'released': instance.released?.toIso8601String(),

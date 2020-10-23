@@ -1,3 +1,4 @@
+import 'package:gpodder_client/src/models/episode_action.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../models/episode_status.dart';
@@ -8,9 +9,7 @@ part 'gpoepisode.g.dart';
 @JsonSerializable()
 class GpoEpisode extends Episode {
   String title;
-  Uri url;
   String podcast_title;
-  Uri podcast_url;
   String description;
   Uri website;
   DateTime released;
@@ -29,9 +28,9 @@ class GpoEpisode extends Episode {
 
   GpoEpisode(
     this.title,
-    this.url,
+    Uri url,
     this.podcast_title,
-    this.podcast_url,
+    Uri podcast_url,
     this.description,
     this.website,
     this.released,
@@ -39,12 +38,28 @@ class GpoEpisode extends Episode {
     this.status,
     this.position,
     this.total,
-  }) : super(url);
+  }) : super(url, podcast_url);
 
   static GpoEpisode from(GpoEpisode gpoepisode) => gpoepisode;
 
   @override
   String toString() {
     return this.title;
+  }
+
+  @override
+  Episode applyAction(EpisodeAction action) {
+    switch (action.action) {
+      case EpisodeStatus.PLAY : {
+        status = status != EpisodeStatus.DOWNLOAD ? EpisodeStatus.PLAY : status;
+        position = action.position ?? position;
+        total = action.total ?? 10 * position;
+      }
+      break;
+      default : {
+        status = action.action;
+      }
+    }
+    return this;
   }
 }

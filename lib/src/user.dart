@@ -1,7 +1,7 @@
-import 'package:gpodder_client/src/api/wrapper.dart';
 import 'package:gpodder_client/src/episode/gpoepisode.dart';
-import 'package:gpodder_client/src/models/client_parametrization.dart';
 import 'package:gpodder_client/src/models/device.dart';
+import 'package:gpodder_client/src/models/episode_action.dart';
+import 'package:gpodder_client/src/models/episode_status.dart';
 import 'package:gpodder_client/src/models/sub_diff.dart';
 import 'package:gpodder_client/src/podcast/gpopodcast.dart';
 import 'package:gpodder_client/src/podcast/podcast.dart';
@@ -9,6 +9,7 @@ import 'package:gpodder_client/src/episode/episode.dart';
 import 'package:gpodder_client/src/server.dart';
 import 'package:gpodder_client/src/store/store.dart';
 import 'package:meta/meta.dart';
+import 'package:podcast_search/podcast_search.dart' as psapi;
 
 class User<P extends Podcast, E extends Episode> {
   final Store<P, E> store;
@@ -91,32 +92,107 @@ class User<P extends Podcast, E extends Episode> {
     ]);
   }
 
-  Future<void> refreshSubscription() async {
+  Future<void> pullSubscription() async {
+    //TODO use proper timestamp
     var update = await server.api.getSubscriptionUpdate(device.id, 0);
     return Future.wait([
       store.deletePodcasts(update.remove),
-      store.savePodcasts(await Future.wait(
-          update.add.map((e) async => await loadPodcast(e)))),
+      store.savePodcasts(
+          await Future.wait(update.add.map((e) async => await loadPodcast(e)))),
       //TODO save timestamp
     ]);
   }
 
-  Future<List<P>> subscriptions() async {
-    return (await store.subscriptions()).toList();
+  Future<List<List<E>>> loadEpisodes([List<P> podcasts]) async {
+    if (podcasts == null) {
+      podcasts = (await subscriptions()).values;
+    }
+    return Future.wait(podcasts.map((p) async {
+      var loadFeed = await psapi.Podcast.loadFeed(url: p.url.toString());
+      var newEpisodes = loadFeed.episodes
+          .where((e) =>
+              //TODO use previous sync DateTime
+              e.publicationDate.isAfter(DateTime.fromMillisecondsSinceEpoch(0)))
+          .map((e) => episodeFrom(GpoEpisode(
+                e.title,
+                Uri.parse(e.contentUrl),
+                loadFeed.title,
+                p.url,
+                e.description,
+                Uri.parse(loadFeed.link),
+                e.publicationDate,
+                null,
+                status: EpisodeStatus.NEW,
+              )));
+      //TODO check if podcasts are subscribed before storing episodes
+      await store.saveEpisodes(newEpisodes);
+      return newEpisodes.toList();
+    }));
   }
 
-  Future<void> setDownloaded(Episode episode) {
-    throw UnsupportedError;
+  Future<Map<Uri, P>> subscriptions() {
+    return store.subscriptions();
   }
 
-  Future<void> setCompletion(
-    Episode episode,
+  Future<Map<Uri, E>> episodes() {
+    return store.episodes();
+  }
+
+  Future<E> setDownloaded(Episode episode) async {
+    var episodeAction = EpisodeAction(
+      episode: episode.url,
+      podcast: episode.podcast_url,
+      action: EpisodeStatus.DOWNLOAD,
+    );
+    episode.applyAction(episodeAction);
+    await Future.wait([
+      server.api.postEpisodeActions([episodeAction]),
+      store.replaceEpisode(episode),
+    ]);
+    return episode;
+  }
+
+  Future<E> setCompletion(
+    E episode,
     int position,
-  ) {
-    throw UnsupportedError;
+    int total,
+  ) async {
+    var episodeAction = EpisodeAction(
+      episode: episode.url,
+      podcast: episode.podcast_url,
+      action: EpisodeStatus.PLAY,
+      started: 0,
+      position: position,
+      total: total,
+    );
+    episode.applyAction(episodeAction);
+    var answer = await server.api.postEpisodeActions([episodeAction]);
+    if(answer.update_urls.isNotEmpty){
+      var urls = answer.update_urls.first;
+      episode.url = urls[1];
+    }
+    store.replaceEpisode(episode);
+    return episode;
   }
 
-  Future<void> toggleEpisodePlayed(Episode episode) {
-    throw UnsupportedError;
+  Future<List<E>> pullEpisodeActions({bool resync = false}) async {
+    //TODO use and store timestamp
+    final since = 0;
+    final device = resync ? null : this.device;
+    final updated = <E>[];
+    final epDiff =
+        await server.api.getEpisodeActions(device: device, since: since);
+    await Future.wait(epDiff.actions.map((action) async {
+      var episode = await store.findEpisodeByGuid(action.episode.toString());
+      //TODO sort out why episode isn't in the db,
+      // not subscribed ? subscribed after sync ? sub sync after episode sync
+      if (episode == null) {
+        return Future.error("episode wasn't found in the database");
+      }
+      episode.applyAction(action);
+      updated.add(episode);
+      await store.replaceEpisode(episode);
+    }));
+    return updated;
   }
 }

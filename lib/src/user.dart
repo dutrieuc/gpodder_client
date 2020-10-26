@@ -123,6 +123,7 @@ class User<P extends Podcast, E extends Episode> {
                 e.publicationDate,
                 null,
                 status: EpisodeStatus.NEW,
+                total: e.duration.inSeconds,
               )));
       //TODO check if podcasts are subscribed before storing episodes
       await store.saveEpisodes(newEpisodes);

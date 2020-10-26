@@ -53,7 +53,7 @@ class GpoEpisode extends Episode {
       case EpisodeStatus.PLAY : {
         status = status != EpisodeStatus.DOWNLOAD ? EpisodeStatus.PLAY : status;
         position = action.position ?? position;
-        total = action.total ?? 10 * position;
+        total = action.total ?? total;
       }
       break;
       default : {

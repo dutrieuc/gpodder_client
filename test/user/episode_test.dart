@@ -42,6 +42,7 @@ void main() {
     episodes = await user.loadEpisodes([podcast]);
     print(episodes);
     first = episodes.first.first;
+    print(first.toJson());
   }, timeout: Timeout(Duration(minutes: 5)));
 
   test('send downloaded status', () async {
@@ -54,8 +55,8 @@ void main() {
   test('send played status', () async {
     print(' --- play');
     print(first.toJson());
-    var position = Random().nextInt(100);
-    var total = 100;
+    var total = first.total;
+    var position = Random().nextInt(total);
     first = await user.setCompletion(first, position, total);
     print(first.toJson());
     first = await user.store.findEpisodeByGuid(first.url.toString());

@@ -2,7 +2,10 @@ name: gpodder_client
 dependencies:
   chopper: ^3.0.0
   json_annotation: ^3.0.0
-  podcast_search: ^0.2.2
+  podcast_search:
+    git:
+      url: https://github.com/amugofjava/podcast_search
+      ref: a19fcfac28532687f541371512edd7226b3b0760
   moor: ^3.3.1
   sqlite3_flutter_libs:
   sqflite: ^1.1.7

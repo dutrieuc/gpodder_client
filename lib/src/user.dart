@@ -187,12 +187,28 @@ class User<P extends Podcast, E extends Episode> {
       //TODO sort out why episode isn't in the db,
       // not subscribed ? subscribed after sync ? sub sync after episode sync
       if (episode == null) {
-        return Future.error("episode wasn't found in the database");
+        return Future.error(EpisodeMissingException(action));
       }
       episode.applyAction(action);
       updated.add(episode);
       await store.replaceEpisode(episode);
     }));
     return updated;
+  }
+}
+
+class EpisodeMissingException implements Exception{
+  final String message =
+   '''EpisodeMissingException,
+   Episode couldn't be found in the database to apply an EpisodeAction.
+   Try synchronizing subscriptions and loading episodes feed before pulling actions.
+  ''';
+  final EpisodeAction action;
+
+  const EpisodeMissingException(this.action);
+
+  @override
+  String toString() {
+    return message  + '\n' + action.toJson().toString();
   }
 }
